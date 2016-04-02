@@ -56,7 +56,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#"> FNetwork</a>
+                <a class="navbar-brand" href="#"> Neural Networks on Halide</a>
             </div>
             <!-- Collect the nav links for toggling -->
             <div class="collapse navbar-collapse navbar-ex1-collapse">
@@ -101,7 +101,7 @@
                     <p>Moreover, power consumption recently has gained massive attentions due to the emerging of mobile devices. As is well know, running real-time text detection and recognition tasks on standalone devices, like a pair of glasses, will quickly drain the battery. Therefore, we may need to exploit the heterogeneity of hardware to boost both performance and efficiency.
                     </p>
                     <h2>Platform</h2>
-                    <p>Halide is a heterogeneity-aware domain specific language (DSL) that aims to produce high-performance image processing code on modern machines. Besides, the bitwise neural networks (BNNs) can further drive down the power consumptions by eliminating power-consuming operations like multiplication [1]. Hence, we expect that a well-implemented BNN on heterogeneous hardware can enable a real-time and always-on service. Specifically, a field-programmable gate array (FPGA) is a reconfigurable hardware and is particularly suitable for fast bit operations, and thus we will first try to port the algorithm on FPGA.</p>
+                    <p>Halide is a heterogeneity-aware domain specific language (DSL) that aims to produce high-performance image processing code on modern machines. Besides, the bitwise neural networks (BNNs) can further drive down the power consumptions by eliminating power-consuming operations like multiplication<a href="#ref1"> [1]</a>. Hence, we expect that a well-implemented BNN on heterogeneous hardware can enable a real-time and always-on service. Specifically, a field-programmable gate array (FPGA) is a reconfigurable hardware and is particularly suitable for fast bit operations, and thus we will first try to port the algorithm on FPGA.</p>
                 </div>
             </div>
         </div>
@@ -117,20 +117,20 @@
                     <ul>
                         <li>Neural networks normally update the weights using back-propagation. Thus, dependencies exist between layers and we need to design proper work assignments inside a layer.</li>
                         <li>Neural networks consist of a massive amount of weights, and the training process involves a lot of iterations. Thus, data locality should be of central concern. </li>
-                        <li>Halide currently cannot directly compile on FPGA. There is ongoing research [2], but the results may not be readily available. If this approach finally proves to be unfeasible, we may try to target on other low power devices, like ARM.</li>
+                        <li>Halide currently cannot directly compile on FPGA. There is ongoing research<a href="#ref2"> [2]</a>, but the results may not be readily available. If this approach finally proves to be unfeasible, we may try to target on other low power devices, like ARM.</li>
                         <li>BNNs anticipate binary inputs, and thus we need to preprocess the raw image, also in parallel.</li>
                         <li>We need to devise a good pipelining strategy to maximize the throughput.</li>
                     </ul>
                     <h2 class="text-center">Resources</h2>
                     <ul>
                         <li>Codebase</br>
-                            To the best of our knowledge, there is no readily available code for BNNs. Therefore, we may start from the algorithm described in the paper [1].</li>
+                            To the best of our knowledge, there is no readily available code for BNNs. Therefore, we may start from the algorithm described in the paper<a href="#ref1"> [1]</a>.</li>
                         <li>High-performance Hardware</br>
                             The training phase of the neural networks require very powerful compute resources, and thus we can exploit the latedays machines.</li>
                         <li>Reconfigurable Hardware</br>
                             BNNs can greatly benefit from hardware acceleration. Ideally, we can implement the classifying phase on reconfigurable hardware, like FPGA.</li>
                         <li>Related work</br>
-                            We may borrow ideas from open-source halide implementation of neural networks [3].
+                            We may borrow ideas from open-source halide implementation of neural networks<a href="#ref3"> [3]</a>.
                         </li>
                     </ul>
                     <h2 class="text-center">Deliverables</h2>
@@ -202,7 +202,7 @@
                                 <div class="events">
                                     <div class="events-body">
                                         <h6 class="events-heading"> <span class="glyphicon glyphicon-pushpin" aria-hidden="true"></span> May 6</h6>
-                                        <p>Port the code to hardware or explore more modern neural networks like residual neural networks [4].</p>
+                                        <p>Port the code to hardware or explore more modern neural networks like residual neural networks<a href="#ref4"> [4]</a>.</p>
                                     </div>
                                 </div>
                             </dd>
@@ -222,9 +222,24 @@
         </div>
     </section>
     <!--End Pricing Section -->
+    <section class="for-full-back color-white challenge" id="about-team">
+        <div class="container">
+            <div class="row introduction">
+                <div class="col-md-12">
+                    <h2 class="text-center">Reference</h2>
+                    <ul>
+                        <li id="ref1">[1] Minje Kim, and Paris Smaragdis. Bitwise Neural Networks. arXiv preprint arXiv:1601.06071v1, 2016</li>
+                        <li id="ref2">[2] Stuart Byma.  <a href="http://wiki.epfl.ch/edicpublic/documents/Candidacy%20exam/PR15byma_edic_proposal.pdf">Programming Datacenter-Scale Reconfigurable Systems.</a> Accessed April 1st.</li>
+                        <li id="ref3">[3] Ravi Mullapudi. <a href="https://github.com/ravi-teja-mullapudi/Halide-NN">https://github.com/ravi-teja-mullapudi/Halide-NN.</a> Accessed April 1st.</li>
+                        <li id="ref4">[4] Kaiming He, Xiangyu Zhang, Shaoqing Ren, and Jian Sun. Deep Residual Learning for Image Recognition. arXiv preprint arXiv:1512.03385v1, 2015</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
     <!--footer Section -->
     <div class="for-full-back " id="footer">
-        2016 | All Right Reserved
+        2016 arainhyy.github.io | All Right Reserved
     </div>
     <!--End footer Section -->
     <!-- JAVASCRIPT FILES PLACED AT THE BOTTOM TO REDUCE THE LOADING TIME  -->
