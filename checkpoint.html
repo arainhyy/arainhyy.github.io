@@ -81,7 +81,7 @@
         <div class="container introduction">
             <div class="row text-center">
                 <div class="col-md-8 col-md-offset-2 ">
-                    <h1>Proposal</h1>
+                    <h1>Checkpoint</h1>
                     <!-- <h4>
                         <strong>
                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
@@ -92,16 +92,21 @@
             </div>
             <div class="row g-pad-bottom">
                 <div class="col-md-12">
-                    <h2>Summary</h2>
+                    <div class="img-alg-auto"><img src="assets/img/alg.jpg" style="width:450px; height:373px;"></div>
+                    <h5 style="text-align: center;">Figure 1. Illustration of parallel alogrithm in FPGA</h5>
+                    <h2>Progress Review</h2>
                     <p>
-                        We plan to implement a set of modern neural networks, especially bitwise neural networks, on halide, speeding up both the training and classifying phase, and hopefully saving power on heterogeneous hardware.
+                        Baseline Implementation. As stated in the proposal, we do not have readily available code for BNN. Thus, we implement a baseline method based on the paper.  Specifically, it takes two steps to train a bitwise neural network. First, we trained a real-valued network that takes either bitwise inputs or real-valued inputs ranged between -1 and 1 by TensorFlow. Second, we binarized the network and use noisy backpropagation to update the weights.  
+                        <br>
+                        <br>
+                        FPGA implementation. With a fairly good pretrained BNN, we began to implement code on FPGA. Given the amount of weights of the neural network, it is impossible to all weights into logic gates. Therefore, we believe that we need to store all the binary weights in on-chip RAM and calculate the results block by block. Specifically, in our scenario, we properly arrange the the weights to 1024 bits per block. Every time we read out 1024 weights, calculate and store the intermedia results in counters. Then, we shift all the input data by 1 bit. Read the new weights and repeat the previous steps for 1024 times. Finally, if the counter has counted more 1s than 0s, we output 1; otherwise, we output 0. This module is shown in Figure 1, and this module can be reused for different layers to reduce the resource consumptions.
                     </p>
-                    <h2>Background</h2>
+                    <h2>Exhibits for the Parallelism Competition</h2>
                     <p>Deep neural networks (DNNs) have substantially pushed the state-of the-art in a wide range of tasks, including speech recognition and computer vision. However, DNNs also require a wealth of compute resources, and thus can benefit greatly from parallelization.</p>
                     <p>Moreover, power consumption recently has gained massive attentions due to the emerging of mobile devices. As is well know, running real-time text detection and recognition tasks on standalone devices, like a pair of glasses, will quickly drain the battery. Therefore, we may need to exploit the heterogeneity of hardware to boost both performance and efficiency.
                     </p>
-                    <h2>Platform</h2>
-                    <p>Halide is a heterogeneity-aware domain specific language (DSL) that aims to produce high-performance image processing code on modern machines. Besides, the bitwise neural networks (BNNs) can further drive down the power consumptions by eliminating power-consuming operations like multiplication<a href="#ref1"> [1]</a>. Hence, we expect that a well-implemented BNN on heterogeneous hardware can enable a real-time and always-on service. Specifically, a field-programmable gate array (FPGA) is a reconfigurable hardware and is particularly suitable for fast bit operations, and thus we will first try to port the algorithm on FPGA.</p>
+                    <h2>Remaining Issues</h2>
+                    <p> Currently, we get stuck with how to choose a proper FPGA with enough storage of nearly 6MB for our implementation. </p>
                 </div>
             </div>
         </div>
@@ -112,37 +117,14 @@
         <div class="container">
             <div class="row introduction">
                 <div class="col-md-12">
-                    <h2 class="text-center">Challenge</h2>
-                    <div class="img-auto"><img src="assets/img/4.jpg"></div>
-                    <ul>
-                        <li>Neural networks normally update the weights using back-propagation. Thus, dependencies exist between layers and we need to design proper work assignments inside a layer.</li>
-                        <li>Neural networks consist of a massive amount of weights, and the training process involves a lot of iterations. Thus, data locality should be of central concern. </li>
-                        <li>Halide currently cannot directly compile on FPGA. There is ongoing research<a href="#ref2"> [2]</a>, but the results may not be readily available. If this approach finally proves to be unfeasible, we may try to target on other low power devices, like ARM.</li>
-                        <li>BNNs anticipate binary inputs, and thus we need to preprocess the raw image, also in parallel.</li>
-                        <li>We need to devise a good pipelining strategy to maximize the throughput.</li>
-                    </ul>
-                    <h2 class="text-center">Resources</h2>
-                    <ul>
-                        <li>Codebase</br>
-                            To the best of our knowledge, there is no readily available code for BNNs. Therefore, we may start from the algorithm described in the paper<a href="#ref1"> [1]</a>.</li>
-                        <li>High-performance Hardware</br>
-                            The training phase of the neural networks require very powerful compute resources, and thus we can exploit the latedays machines.</li>
-                        <li>Reconfigurable Hardware</br>
-                            BNNs can greatly benefit from hardware acceleration. Ideally, we can implement the classifying phase on reconfigurable hardware, like FPGA.</li>
-                        <li>Related work</br>
-                            We may borrow ideas from open-source halide implementation of neural networks<a href="#ref3"> [3]</a>.
-                        </li>
-                    </ul>
                     <h2 class="text-center">Deliverables</h2>
                     <ul>
-                        <li>Baseline implementation
+                        <li>(Completed) Baseline implementation
                             <br> Since there is no readily available codebase, we will try to implement a baseline algorithm in open-source frameworks, like caffe, torch or tensorflow.</li>
-                        <li>Fast Halide implementation
-                            <br> We will parallelize the baseline implementation using halide. Also, we will try to exploit locality to speed up the algorithm as much as possible.</li>
                         <li>Evaluation
-                            <br> We will evaluate our implementation by comparing our runtime to the baseline. If possible, we can also compare our runtime with open-source implementation and auto-scheduled halide implementation.</li>
+                            <br> Evaluation. We will evaluate our implementation by comparing our runtime to the baseline. </li>
                         <li>Hardware demo
-                            <br> Hopefully, we can deliver a hardware demo on FPGA.</li>
+                            <br> Hardware demo. Hopefully, we can deliver a hardware demo on FPGA. The ideal demo would be of three parts: a camera used to generate inputs, a segment display used to display the results, and FPGA.</li>
                     </ul>
                 </div>
             </div>
@@ -165,7 +147,7 @@
                                 <div class="events">
                                     <div class="events-body">
                                         <h6 class="events-heading"> <span class="glyphicon glyphicon-pushpin" aria-hidden="true"></span> Apr 9</h6>
-                                        <p>Learn to use Halide and implement a correct baseline algorithm.</p>
+                                        <p>(Completed) Get familiar with training bitwise neural networks and implement a correct baseline algorithm.</p>
                                     </div>
                                 </div>
                             </dd>
@@ -174,7 +156,7 @@
                                 <div class="events">
                                     <div class="events-body">
                                         <h6 class="events-heading"> <span class="glyphicon glyphicon-pushpin" aria-hidden="true"></span> Apr 16</h6>
-                                        <p>Implement neural networks on Halide and attempt several scheduling policies.</p>
+                                        <p>(Completed) Tune parameters and implement retrain process to approach the results of the paper.</p>
                                     </div>
                                 </div>
                             </dd>
@@ -183,7 +165,7 @@
                                 <div class="events">
                                     <div class="events-body">
                                         <h6 class="events-heading"> <span class="glyphicon glyphicon-pushpin" aria-hidden="true"></span> Apr 23</h6>
-                                        <p>Optimize the algorithm and evaluate the optimized code against the baseline, auto-scheduling and the state-of-the-art.</p>
+                                        <p>Implement training algorithm by VHDL.</p>
                                     </div>
                                 </div>
                             </dd>
@@ -222,7 +204,7 @@
         </div>
     </section>
     <!--End Pricing Section -->
-    <section class="for-full-back color-white challenge" id="about-team">
+    <!-- <section class="for-full-back color-white challenge" id="about-team">
         <div class="container">
             <div class="row introduction">
                 <div class="col-md-12">
@@ -236,7 +218,7 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> -->
     <!--footer Section -->
     <div class="for-full-back " id="footer">
         2016 arainhyy.github.io | All Right Reserved
