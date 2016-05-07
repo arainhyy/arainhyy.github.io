@@ -116,25 +116,25 @@
                 <div class="col-md-12">
                     <h2>Design</h2>
                     <p>In a fully-connected neural network, the number of weights grows O(n<sup>2</sup>) with a number of nodes. Our network has 1024 nodes per hidden layer, and this is equivalent to one million interconnections in hardware, which is certainly impractical. One approach is to partition the network. As shown in Figure 1, a big network is equivalent to several small networks. However, the amount of parallelization also decreases O(n<sup>2</sup>) with the number of partitions.</p>
-                    <div class="img-f1-auto"><img src="assets/img/figure1.jpg" style="width:635px; height:355px;"></div>
+                    <div class="img-auto"><img src="assets/img/figure1.jpg"></div>
                     <h5 style="text-align: center;">Figure 1.  Neural networks can be partitioned into n<sup>2</sup> parts and each part contains only 1/n of the nodes</h5>
                     <p>To achieve both high parallelization and resource efficiency, we use a trick, i.e. shift the input to find the weight, which is shown in Figure 2. Specifically,. By this means, we can reduce the interconnections from one million to two thousand, which is a 500 times saving. Also, the number of interconnections now grows only O(n) instead of O(n<sup>2</sup>) with the number of nodes, which is much more scalable. </p>
-                    <div class="img-f2-auto"><img src="assets/img/figure2.jpg" style="width:527px; height:172px;"></div>
+                    <div class="img-auto"><img src="assets/img/figure2.jpg"></div>
                     <h5 style="text-align: center;">Figure 2. Interconnections can be reused if we shift the inputs to proper locations</h5>
                     <p>Furthermore, the number of nodes in each layer is usually not the same. For example, we use a 784-1024-1024-1024-10 network. If we use different designs for different layers, it mean 4 times more resources, and the resource usage for a deeper network will explode. Therefore, we adopt the idea of inactive weights, e.g. an enable signal will decide whether the corresponding weight will count. Therefore, we can pad every matrices that are less than 1024 x 1024 with inactive weights so that all layers can reuse the same hardware module, no matter how many layers. By this means, we significantly save the hardware resources, in our scenario, by a factor of 4.</p>
                     <p>It turns out that if we rearrange the weights by diagonal order, we can use shift and elementwise multiplication instead of matrix multiplication, as shown in Figure 3.</p>
-                    <div class="img-f3-auto"><img src="assets/img/figure3.jpg" style="width:693px; height:390px;"></div>
+                    <div class="img-auto"><img src="assets/img/figure3.jpg"></div>
                     <h5 style="text-align: center;">Figure 3</h5>
                     <p>The upper figure shows that matrix multiplication can be converted to elementwise multiplication with element shifting, where ◦ denotes elementwise multiplication. The lower figure shows that we should project weights on the diagonal to the corresponding row to achieve this conversion.</p>
                     <p>Combining all ideas shown above, the final implementation is illustrated in Figure 4.</p>
-                    <div class="img-alg-auto"><img src="assets/img/alg.jpg" style="width:450px; height:373px;"></div>
+                    <div class="img-auto"><img src="assets/img/figure4.jpg"></div>
                     <h5 style="text-align: center;">Figure 4</h5>
                     <p>The hardware implementation of shift and multiply idea. The input is shifted on every clock. Then, the XNOR operation is performed and the counter will count the bit. After the an entire layer is processed, 1024 shifts in our scenario, the activation layer will decide whether to activate or not based on how many ‘1’s the counter has counted.</p>
                     <h2>Evaluation</h2>
                     <p>In this section, we compare our design with the state-of-the-art approach, and we find that our approach greatly outperform the state-of-the-art. Note that all measurements are converted to be resource-neural as the related paper tests on a much better FPGA than ours.</p>
                     <p>We target on the digit classification task using the MNIST dataset and all the following experiments are based on the Altera DE2-115 board. For the first part, we mainly focus on comparison with existing papers, i.e. latest FPGA implementations and GPU implementations. In the second part, we will compare our results with the open source tensorflow design.</p>
                     <p>As shown in Figure 5, we speed up the classification phase by 1024x. Compared with the cycles needed for loading weights, it is almost negligible. We could actually partition the 1024 x 1024 networks into four 512 x 512 network to further half the resource usage according to the idea shown in Figure 1.</p>
-                    <div class="img-f5-auto"><img src="assets/img/figure5.png" style="width:641px; height:431px;"></div>
+                    <div class="img-auto img-f5-auto"><img src="assets/img/figure5.png"></div>
                     <h5 style="text-align: center;">Figure 5.  The cycles needed for computing drop by a factor of 1024.</h5>
                     <p>After compensating for the difference in the board, i.e. consider cycles rather than absolute time, our design achieve 4x throughput than [2]. Moreover, our design has a 35 times lower latency than [2], as they use a batch size of 100 to exchange latency for throughput. Also, they use over 210,000 logic cells, while we only use 37,000, which is only sixth of [2]. The real power measurement of [2] is 1 mJ per image, and the Altera power estimator shows our design consumes 0.56 mJ per image. Considering the possibility of under-estimating, the energy consumption could be very similar in the real world. A full comparison is listed in Table 1.</p>
 

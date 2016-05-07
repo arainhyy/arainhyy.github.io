@@ -268,12 +268,12 @@ section.challenge {
     font-size: 40px;
 }
 .img-auto {
-    width: 605px;
+    /*width: 605px;*/
     margin: 0 auto;
-    margin-bottom: 20px;
+   /* margin-bottom: 20px;
     margin-top: 20px;
     border-radius: 10px;
-    overflow: hidden;
+    overflow: hidden;*/
 }
 .img-alg-auto {
     width: 450px;
@@ -295,9 +295,16 @@ section.challenge {
     width: 527px;
     margin: 0 auto;
 }
+@media(min-width: 1000px){
 .img-f5-auto {
-    width: 641px;
-    margin: 0 auto;
+     max-width: 60%;
+}
+}
+.img-auto img {
+    /*max-width: 100%;*/
+    display: block;
+    margin: auto;
+        max-width: 100%;
 }
 /*=======================================
     SERVICE STYLES
