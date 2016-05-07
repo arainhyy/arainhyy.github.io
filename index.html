@@ -14,7 +14,7 @@
     <!--[if IE]>
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <![endif]-->
-    <title>Neural Networks on Halide: High-Speed and Low-Power</title>
+    <title>Bitwise Neural Networks on FPGA: High-Speed and Low-Power</title>
     <!--REQUIRED STYLE SHEETS-->
     <!-- BOOTSTRAP CORE STYLE CSS -->
     <link href="assets/css/bootstrap.css" rel="stylesheet" />
@@ -39,7 +39,7 @@
     <div class="container" id="home">
         <div class="row text-center">
             <div class="col-md-12">
-                <h1 class="head-main">  Neural Networks on Halide</h1>
+                <h1 class="head-main">Neural Networks on FPGA</h1>
                 <h2 class="head-sub-main"> High-Speed and Low-Power</h2>
                 <h3 class="head-last"><a href="https://www.linkedin.com/in/yunfanye">Yunfan Ye</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://www.linkedin.com/in/araina-huang-00853b96">Yayun Huang</a></h3>
             </div>
@@ -56,10 +56,10 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#"> Neural Networks on Halide</a>
+                <a class="navbar-brand" href="#"> FBNN</a>
             </div>
             <!-- Collect the nav links for toggling -->
-            <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <div class="collapse navbar-collapse navbar-ex1-collapse pull-right">
                 <ul class="nav navbar-nav">
                     <li><a href="index.html">HOME</a>
                     </li>
@@ -77,11 +77,11 @@
     </nav>
     <!--End Navigation -->
     <!--About Section-->
-    <section class="for-full-back color-white " id="about">
+    <section class="for-full-back color-light " id="about">
         <div class="container introduction">
             <div class="row text-center">
                 <div class="col-md-8 col-md-offset-2 ">
-                    <h1>Proposal</h1>
+                    <h1>Final</h1>
                     <!-- <h4>
                         <strong>
                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
@@ -94,129 +94,71 @@
                 <div class="col-md-12">
                     <h2>Summary</h2>
                     <p>
-                        We plan to implement a set of modern neural networks, especially bitwise neural networks, on halide, speeding up both the training and classifying phase, and hopefully saving power on heterogeneous hardware.
+                        We implemented bitwise neural networks on FPGA and run tests on the MNIST dataset. Experiments show that we achieve 4x speed compared with the state-of-the-art FPGA implementation.
                     </p>
                     <h2>Background</h2>
                     <p>Deep neural networks (DNNs) have substantially pushed the state-of the-art in a wide range of tasks, including speech recognition and computer vision. However, DNNs also require a wealth of compute resources, and thus can benefit greatly from parallelization.</p>
-                    <p>Moreover, power consumption recently has gained massive attentions due to the emerging of mobile devices. As is well know, running real-time text detection and recognition tasks on standalone devices, like a pair of glasses, will quickly drain the battery. Therefore, we may need to exploit the heterogeneity of hardware to boost both performance and efficiency.
-                    </p>
-                    <h2>Platform</h2>
-                    <p>Halide is a heterogeneity-aware domain specific language (DSL) that aims to produce high-performance image processing code on modern machines. Besides, the bitwise neural networks (BNNs) can further drive down the power consumptions by eliminating power-consuming operations like multiplication<a href="#ref1"> [1]</a>. Hence, we expect that a well-implemented BNN on heterogeneous hardware can enable a real-time and always-on service. Specifically, a field-programmable gate array (FPGA) is a reconfigurable hardware and is particularly suitable for fast bit operations, and thus we will first try to port the algorithm on FPGA.</p>
+                    <p>Moreover, power consumption recently has gained massive attentions due to the emerging of mobile devices. As is well known, running real-time text detection and recognition tasks on standalone devices, like a pair of glasses, will quickly drain the battery. Therefore, we need to exploit the heterogeneity of hardware to boost both performance and efficiency. </p>
+                    <p>The attempt to implement neural networks on FPGA dates back to 24 years ago [1], yet no design shows a potential of commercial use until recently [2]. However, the recent design still suffers from high resource usage and high latency. In this work, we propose a resource-efficient implementation, which also has higher throughput and lower latency.</p>
+                    <h2>Contributions</h2>
+                    <p>Neural networks only have dependency between layers, and thus it is theorectically possible to fully parallelize inside a layer. However, due to millions, or even billions, of weights, this is practically impossible due to the lack of resources. In this project, we propose a novel implementation based on the bitwise neural networks. Specifically, we reschedule the compute process and sucessfully reuse some hardware components, which achieves a 1024-way parallelization with only a limited amount of resources.</p>
+                    <h2>Bitwise Neural Networks</h2>
+                    <p>Kim et al. propose a resource effient design of deep neural network [3], which replaces float multiplication with bit XNOR and fllot addition with bit counting. Specifically, we only need to do XNOR between inputs and weights in one layer and the output to next layer is activated if the counts of ‘1’s is greater than a threshold.</p>
                 </div>
             </div>
         </div>
     </section>
     <!--End About Section-->
     <!-- About Team Section -->
-    <section class="for-full-back color-light challenge" id="about-team">
+    <section class="for-full-back color-white challenge" id="about-team">
         <div class="container">
             <div class="row introduction">
                 <div class="col-md-12">
-                    <h2 class="text-center">Challenge</h2>
-                    <div class="img-auto"><img src="assets/img/4.jpg"></div>
-                    <ul>
-                        <li>Neural networks normally update the weights using back-propagation. Thus, dependencies exist between layers and we need to design proper work assignments inside a layer.</li>
-                        <li>Neural networks consist of a massive amount of weights, and the training process involves a lot of iterations. Thus, data locality should be of central concern. </li>
-                        <li>Halide currently cannot directly compile on FPGA. There is ongoing research<a href="#ref2"> [2]</a>, but the results may not be readily available. If this approach finally proves to be unfeasible, we may try to target on other low power devices, like ARM.</li>
-                        <li>BNNs anticipate binary inputs, and thus we need to preprocess the raw image, also in parallel.</li>
-                        <li>We need to devise a good pipelining strategy to maximize the throughput.</li>
-                    </ul>
-                    <h2 class="text-center">Resources</h2>
-                    <ul>
-                        <li>Codebase</br>
-                            To the best of our knowledge, there is no readily available code for BNNs. Therefore, we may start from the algorithm described in the paper<a href="#ref1"> [1]</a>.</li>
-                        <li>High-performance Hardware</br>
-                            The training phase of the neural networks require very powerful compute resources, and thus we can exploit the latedays machines.</li>
-                        <li>Reconfigurable Hardware</br>
-                            BNNs can greatly benefit from hardware acceleration. Ideally, we can implement the classifying phase on reconfigurable hardware, like FPGA.</li>
-                        <li>Related work</br>
-                            We may borrow ideas from open-source halide implementation of neural networks<a href="#ref3"> [3]</a>.
-                        </li>
-                    </ul>
-                    <h2 class="text-center">Deliverables</h2>
-                    <ul>
-                        <li>Baseline implementation
-                            <br> Since there is no readily available codebase, we will try to implement a baseline algorithm in open-source frameworks, like caffe, torch or tensorflow.</li>
-                        <li>Fast Halide implementation
-                            <br> We will parallelize the baseline implementation using halide. Also, we will try to exploit locality to speed up the algorithm as much as possible.</li>
-                        <li>Evaluation
-                            <br> We will evaluate our implementation by comparing our runtime to the baseline. If possible, we can also compare our runtime with open-source implementation and auto-scheduled halide implementation.</li>
-                        <li>Hardware demo
-                            <br> Hopefully, we can deliver a hardware demo on FPGA.</li>
-                    </ul>
+                    <h2>Design</h2>
+                    <p>In a fully-connected neural work, the number of weights grows O(n^2) with a number of nodes. Our netwrok has 1024 nodes per hidden layer, and this is equivalent to one million interconnections in hardware, which is certainly impractical. One approach is to partition the network. As shown in Figure 1, a big network is equivalent to several small networks. However, the amount of parallelization also decreases O(n^2) with the number of partitions.</p>
+                    <div class="img-f1-auto"><img src="assets/img/figure1.jpg" style="width:635px; height:355px;"></div>
+                    <h5 style="text-align: center;">Figure 1.  Neural networks can be partitioned into n^2 parts and each part contains only 1/n of the nodes</h5>
+                    <p>To achieve both high parallelization a`nd resoure efficiency, we use a trick, i.e. shift the input to find the weight, which is shown in Figure 2. Specifically,. By this means, we can reduce the interconnections from one milliion to two thousand, which is a 500 times saving. Also, the number of interconnections now grows only O(n) instead of O(n^2) with the number of nodes, which is much more scalable. </p>
+                    <div class="img-f2-auto"><img src="assets/img/figure2.jpg" style="width:527px; height:172px;"></div>
+                    <h5 style="text-align: center;">Figure 2. Interconnections can be resued if we shift the inputs to proper locations</h5>
+                    <p>Furthermore, the number of nodes in each layer is usually not the same. For example, we use a 784-1024-1024-1024-10 network. If we use different designs for different layers, it mean 4 times more resources, and the resource usage for a deeper network will explode. Therefore, we adopt the idea of inactive weights, e.g. an enable signal will decide whether the corresponding weight will count. Therefore, we can pad every matrices that are less than 1024 x 1024 with inactive weights so that all layers can reuse the same hardware module, no matter how many layers. By this means, we significantly save the hardware resources, in our scenario, by a factor of 4.</p>
+                    <p>It turns out that if we rearrange the weights by diagonal order, we can use shift and elementwise multiplication instead of matrix mulplication, as shown in Figure 3.</p>
+                    <div class="img-f3-auto"><img src="assets/img/figure3.jpg" style="width:693px; height:390px;"></div>
+                    <h5 style="text-align: center;">Figure 3</h5>
+                    <p>The upper figure shows that matrix multiplication can be converted to elementwise multiplication with element shifting, where ◦ denotes elementwise multiplication. The lower figure shows that we should project weights on the diagonal to the corresponding row to achieve this conversion.</p>
+                    <p>Combining all ideas shown above, the final implementation is illustrated in Figure 4.</p>
+                    <div class="img-alg-auto"><img src="assets/img/alg.jpg" style="width:450px; height:373px;"></div>
+                    <h5 style="text-align: center;">Figure 4</h5>
+                    <p>The hardware implementation of shift and multiply idea. The input is shifted on every clock. Then, the XNOR operation is performed and the counter will count the bit. After the an entire layer is processed, 1024 shifts in our scenario, the activation layer will decide whether to activate or not based on how many ‘1’s the counter has counted.</p>
+                    <h2>Evaluation</h2>
+                    <p>In this section, we compare our design with the state-of-the-art approach, and we find that our approach greatly outperform the state-of-the-art. Note that all measurements are converted to be resource-neural as the related paper tests on a much better FPGA than ours.</p>
+                    <p>We target on the digit classification task using the MNIST dataset and all the following experiments are based on the Altera DE2-115 board. For the first part, we mainly focus on comparison with existing papers, i.e. latest FPGA implementations and GPU implementaions. In the second part, we will compare our results with the open source tensorflow design.</p>
+                    <p>As shown in Figure 5, we speed up the classification phase by 1024x. Compared with the cycles needed for loading weights, it is almost negligible. We could actually partition the 1024 x 1024 networks into four 512 x 512 network to further half the resource usage according to the idea shown in Figure 1.</p>
+                    <div class="img-alg-auto"><img src="assets/img/figure1.jpg" style="width:450px; height:373px;"></div>
+                    <h5 style="text-align: center;">Figure 5.  The cycles needed for computing drop by a factor of 1024.</h5>
+                    <p>After compensating for the difference in the board, i.e. consider cycles rather than absolute time, our design achieve 4x throughput than [2]. Moreover, our design has a 60 times less latency than [2], as they uses a batch size of 100 to exchange latency for throughput. Also, they use over 210,000 Logic cells, while we only use 37,000, which is only sixth of [2]. A full comparison is listed in Table 1.</p>
+                    <p>The state-of-the-art design using a high-end GPU can recognize 250,000 images per second, but also consumes 250 Watt energy. </p>
+                    <p>Finally, we compare our design with the tensorflow implementation of the original network using 8 threads running on a 8-way hyperthreading CPU with 2.40GHz clock. CPU code only runs 25 times faster than our FPGA implementation, although it uses 8 times more core and each core is 48 times faster. </p>
                 </div>
             </div>
         </div>
     </section>
     <!--End About Team Section -->
     <!-- Pricing Section -->
-    <section class="for-full-back color-light schedule" id="price-sec">
+    <section class="for-full-back color-light" id="price-sec">
         <div class="container">
-            <div class="row text-center">
-                <h2 class="text-center">Schedule</h2>
-                <!--TimeLine
-      ================================================== -->
+            <div class="row introduction">
                 <div class="col-md-12">
-                    <div class="timeline">
-                        <dl>
-                            <dt>Apr 2016</dt>
-                            <dd class="pos-right clearfix">
-                                <div class="circ"></div>
-                                <div class="events">
-                                    <div class="events-body">
-                                        <h6 class="events-heading"> <span class="glyphicon glyphicon-pushpin" aria-hidden="true"></span> Apr 9</h6>
-                                        <p>Learn to use Halide and implement a correct baseline algorithm.</p>
-                                    </div>
-                                </div>
-                            </dd>
-                            <dd class="pos-left clearfix">
-                                <div class="circ"></div>
-                                <div class="events">
-                                    <div class="events-body">
-                                        <h6 class="events-heading"> <span class="glyphicon glyphicon-pushpin" aria-hidden="true"></span> Apr 16</h6>
-                                        <p>Implement neural networks on Halide and attempt several scheduling policies.</p>
-                                    </div>
-                                </div>
-                            </dd>
-                            <dd class="pos-right clearfix">
-                                <div class="circ"></div>
-                                <div class="events">
-                                    <div class="events-body">
-                                        <h6 class="events-heading"> <span class="glyphicon glyphicon-pushpin" aria-hidden="true"></span> Apr 23</h6>
-                                        <p>Optimize the algorithm and evaluate the optimized code against the baseline, auto-scheduling and the state-of-the-art.</p>
-                                    </div>
-                                </div>
-                            </dd>
-                            <dd class="pos-left clearfix">
-                                <div class="circ"></div>
-                                <div class="events">
-                                    <div class="events-body">
-                                        <h6 class="events-heading"> <span class="glyphicon glyphicon-pushpin" aria-hidden="true"></span> Apr 29</h6>
-                                        <p>Prepare for final exam and analyze the feasibility of porting the code to hardware.</p>
-                                    </div>
-                                </div>
-                            </dd>
-                            <dt>Mar 2016</dt>
-                            <dd class="pos-right clearfix">
-                                <div class="circ"></div>
-                                <div class="events">
-                                    <div class="events-body">
-                                        <h6 class="events-heading"> <span class="glyphicon glyphicon-pushpin" aria-hidden="true"></span> May 6</h6>
-                                        <p>Port the code to hardware or explore more modern neural networks like residual neural networks<a href="#ref4"> [4]</a>.</p>
-                                    </div>
-                                </div>
-                            </dd>
-                            <dd class="pos-left clearfix">
-                                <div class="circ"></div>
-                                <div class="events">
-                                    <div class="events-body">
-                                        <h6 class="events-heading"> <span class="glyphicon glyphicon-pushpin" aria-hidden="true"></span> May 8</h6>
-                                        <p>Write final report and prepare for competition.</p>
-                                    </div>
-                                </div>
-                            </dd>
-                        </dl>
-                    </div>
+                    <h2 class="text-center">Limitations and further optimizations</h2>
+                    <p>The speedup of our final program is bandwidth bound. Specifically, classification of one image requires four million weights. Also, since we adopt a extended version of binary weights, i.e. 0, 1 and inactive, each weght needs two bits. Therefore, for each round of classification, we need 8 million weights, which consumes 1 MB storage. However, the board we used can only transfer 16 bits per read. Besides, each read requires at least two cycles, address and output, and that means the bandwidth is 50 MB per second. Therefore, the maximum throughput is only 50 images per second, compared with 12200 if not bandwidth bound. Note that a better board, say XC7Z045 with 102.4 Gbit/sec bandwidth, will significant lessen our problem. However, it is still bandwidth bound as the better board also has a clock with higher frequency.</p>
+                    <p>Some approaches can be exploited to solve this problem. First, we can batch the image and process them simultaneous, because all images go through exactly the same classification process. Specifically, we can duplicate 10 sets of the aforementioned module. Then, for every 10 images, we only need to load 1 MB weights, and this increase the throughput by 10x. However, we also need more hardware resources in this case. Second, our experiments show that over 80% of weights are inactive. Those weights do not affect the results at all, and thus we may design several compression schemes in the future.</p>
+                    <p>Another optimization is hardware specific. Concretely, in our design, we use three hidden layers of 1024 nodes, which is a common setting in the machine learning world. However, we can use 1022 nodes per layer instead of 1024 nodes. This does not make any difference to the neural network, yet it can further save 9% hardware resources as we need 11 bits to represent 1024 while only 10 bits to represent 1022.</p>
+                    <h2 class="text-center">Demo</h2>
+                    <p>We are still working hard on preparing a illustrative and interesting demo.</p>
+                    <h2 class="text-center">Conclusions</h2>
+                    <p>FPGA implementation of neural networks benefit from higher parallelism, lower energy comsumptions and no jitters. Our novel implementation of neural networks have a significant gain over the state-of-the-arts. Also, our design shows the potential of commercial use in more complex tasks.</p>
+                    <h2 class="text-center">Acknowledgements</h2>
+                    <p>Thanks to 418 staffs for designing this wonderful project and bringing us to this interesting topic, especially Karima for proposing the initial idea. Also, thank Prof. Bill Nace for providing us with the hardware resources.</p>
                 </div>
             </div>
         </div>
@@ -228,11 +170,27 @@
                 <div class="col-md-12">
                     <h2 class="text-center">Reference</h2>
                     <ul>
-                        <li id="ref1">[1] Minje Kim, and Paris Smaragdis. Bitwise Neural Networks. arXiv preprint arXiv:1601.06071v1, 2016</li>
-                        <li id="ref2">[2] Stuart Byma.  <a href="http://wiki.epfl.ch/edicpublic/documents/Candidacy%20exam/PR15byma_edic_proposal.pdf">Programming Datacenter-Scale Reconfigurable Systems.</a> Accessed April 1st.</li>
-                        <li id="ref3">[3] Ravi Mullapudi. <a href="https://github.com/ravi-teja-mullapudi/Halide-NN">https://github.com/ravi-teja-mullapudi/Halide-NN.</a> Accessed April 1st.</li>
-                        <li id="ref4">[4] Kaiming He, Xiangyu Zhang, Shaoqing Ren, and Jian Sun. Deep Residual Learning for Image Recognition. arXiv preprint arXiv:1512.03385v1, 2015</li>
+                        <li id="ref1">[1] Cox, C.E. and E. Blanz, GangLion - a fast field Programmable gate array implementation of a connectionist classifier. IEEE Journal of Solid-State Circuits, 1992. 28(3): p. 288-299.</li>
+                        <li id="ref2">[2] Jinhwan Park, Wonyong Sung. Fpga Based Implementation of Deep Neural Networks Using On-chip Memory Only. arXiv preprint arXiv:1602.01616, 2016.</li>
+                        <!-- <li id="ref3">[3] Ravi Mullapudi. <a href="https://github.com/ravi-teja-mullapudi/Halide-NN">https://github.com/ravi-teja-mullapudi/Halide-NN.</a> Accessed April 1st.</li> -->
+                        <li id="ref3">[3] Minje Kim, and Paris Smaragdis. Bitwise Neural Networks. arXiv preprint arXiv:1601.06071v1, 2016</li>
                     </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="for-full-back color-light">
+        <div class="container">
+            <div class="row introduction">
+                <div class="col-md-12">
+                    <h2>Appendix I - Work Division</h2>
+                    <p>Equal work was performed by both project members.</p>
+                    <h2>Appendix II - Personal Challenges</h2>
+                    <p>This is a trivial and unexciting section, but it briefly describes the process we have gone through and challenges we have met.</p>
+                    <p>First, our implementation is based on a short paper from Kim et al. and we do not have any code available. Also, the paper does not record detailed information. Thus, we have to a lot of other papers and try a bunch of settings to reproduce the results. </p>
+                    <p>Second, as non-ECE students, we did experience a hard time finding proper FPGA boards. Even after securing a board, we still encouter a lot of unexpected issues as we are non-ECE students. Due to the hardware problem, we have to make more backup plans, which brings troubles, but also help to shape our thoughts.</p>
+                    <p>Third, as mentioned above, neural networks only have dependency between layers. Therefore, the first attempt tries to fully parallelize the entire layer by turning all weights to logical gates. Certainly, it is currently impossible to find one FPGA with at least 1024x1024 logic cells to store weights. Thus, we switched to our final design.</p>
+                    <p>Along the way, we learn a wealth of new concepts and consistenly change our plan according to the resources. In addition to the people mentioned in a previous section, we also sincerely thank everyone who have offered help or information, Kim, Darrin, etc.</p>
                 </div>
             </div>
         </div>
