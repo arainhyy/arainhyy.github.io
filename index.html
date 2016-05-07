@@ -39,7 +39,7 @@
     <div class="container" id="home">
         <div class="row text-center">
             <div class="col-md-12">
-                <h1 class="head-main">Neural Networks on FPGA</h1>
+                <h1 class="head-main">Bitwise Neural Networks on FPGA</h1>
                 <h2 class="head-sub-main"> High-Speed and Low-Power</h2>
                 <h3 class="head-last"><a href="https://www.linkedin.com/in/yunfanye">Yunfan Ye</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://www.linkedin.com/in/araina-huang-00853b96">Yayun Huang</a></h3>
             </div>
@@ -103,7 +103,7 @@
                     <h2>Contributions</h2>
                     <p>Neural networks only have dependency between layers, and thus it is theoretically possible to fully parallelize inside a layer. However, due to millions, or even billions, of weights, this is practically impossible due to the lack of resources. In this project, we propose a novel implementation based on the bitwise neural networks. Specifically, we reschedule the compute process and successfully reuse some hardware components, which achieves a 1024-way parallelization with only a limited amount of resources.</p>
                     <h2>Bitwise Neural Networks</h2>
-                    <p>Kim et al. propose a resource efficient design of deep neural network [3], which replaces float multiplication with bit XNOR and float addition with bit counting. Specifically, we only need to do XNOR between inputs and weights in one layer and the output to next layer is activated if the counts of ‘1’s is greater than a threshold.</p>
+                    <p>Kim et al. propose a resource efficient design of deep neural network [3], which replaces float multiplication with bit XNOR and float addition with bit counting. Specifically, we only need to do XNOR between inputs and weights in one layer and the output to next layer is activated if the counts of ‘1’s is greater than a threshold. By this change, the workload pattern becomes very suitable and highly parallelizable for hardware, e.g. FPGA, at the expense of only a small decrease of accuracy, from 98.9% to 98.7%.</p>
                 </div>
             </div>
         </div>
