@@ -61,14 +61,14 @@
             <!-- Collect the nav links for toggling -->
             <div class="collapse navbar-collapse navbar-ex1-collapse pull-right">
                 <ul class="nav navbar-nav">
-                    <li><a href="index.html">HOME</a>
+                    <!-- <li><a href="index.html">HOME</a>
                     </li>
                     <li><a href="index.html">PROPOSAL</a>
                     </li>
                     <li><a href="checkpoint.html">CHECKPOINT</a>
                     </li>
                     <li><a href="index.html#price-sec">FINAL REPORT</a>
-                    </li>
+                    </li> -->
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
@@ -137,6 +137,34 @@
                     <div class="img-f5-auto"><img src="assets/img/figure5.png" style="width:641px; height:431px;"></div>
                     <h5 style="text-align: center;">Figure 5.  The cycles needed for computing drop by a factor of 1024.</h5>
                     <p>After compensating for the difference in the board, i.e. consider cycles rather than absolute time, our design achieve 4x throughput than [2]. Moreover, our design has a 35 times lower latency than [2], as they use a batch size of 100 to exchange latency for throughput. Also, they use over 210,000 logic cells, while we only use 37,000, which is only sixth of [2]. The real power measurement of [2] is 1 mJ per image, and the Altera power estimator shows our design consumes 0.56 mJ per image. Considering the possibility of under-estimating, the energy consumption could be very similar in the real world. A full comparison is listed in Table 1.</p>
+
+                    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th></th>
+          <th>baseline</th>
+          <th>our design</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">throughput</th>
+          <td>1</td>
+          <td>3.39</td>
+        </tr>
+        <tr>
+          <th scope="row">1/latency*</th>
+          <td>1</td>
+          <td>3.39</td>
+        </tr>
+        <tr>
+          <th scope="row">energy efficiency**</th>
+          <td>1</td>
+          <td>1.78</td>
+        </tr>
+      </tbody>
+    </table>
+                    <h5 style="text-align: center;">Table 1</h5>
                     <p>Table 1 Relative improvement of our design. *lower latency means better performance, and thus we use the reciprocal of latency. **Energy efficiency is measured per image and the energy consumption for our design is estimated by the Altera power estimator, which could be an under-estimate.</p>
                     <p>Finally, we compare our design with the tensorflow implementation of the original network using 8 threads running on a 8-way hyperthreading CPU with 2.40GHz clock. CPU code only runs 25 times faster than our FPGA implementation, although it uses 8 times more core and each core is 48 times faster. Moreover, the same design using a high-end GPU can recognize 250,000 images per second, but also consumes 250 Watt energy. On a per image basis, our energy consumption is only a little, 1.7x, better than that of a GPU design. However, in practice, say on a standalone device, we may not really need to classify 250,000 per second. In this case, our design will have much higher energy efficiency than a GPU design as the GPU heavily relies on batch processing to amortize the cost.</p>
                 </div>
