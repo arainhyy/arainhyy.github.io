@@ -124,8 +124,7 @@
                     <p>Furthermore, the number of nodes in each layer is usually not the same. For example, we use a 784-1024-1024-1024-10 network. If we use different designs for different layers, it mean 4 times more resources, and the resource usage for a deeper network will explode. Therefore, we adopt the idea of inactive weights, e.g. an enable signal will decide whether the corresponding weight will count. Therefore, we can pad every matrices that are less than 1024 x 1024 with inactive weights so that all layers can reuse the same hardware module, no matter how many layers. By this means, we significantly save the hardware resources, in our scenario, by a factor of 4.</p>
                     <p>It turns out that if we rearrange the weights by diagonal order, we can use shift and elementwise multiplication instead of matrix multiplication, as shown in Figure 3.</p>
                     <div class="img-auto"><img src="assets/img/figure3.jpg"></div>
-                    <h5 style="text-align: center;">Figure 3</h5>
-                    <p>The upper figure shows that matrix multiplication can be converted to elementwise multiplication with element shifting, where denotes elementwise multiplication. The lower figure shows that we should project weights on the diagonal to the corresponding row to achieve this conversion.</p>
+                    <h5 style="text-align: center;">Figure 3. The upper figure shows that matrix multiplication can be converted to elementwise multiplication with element shifting, where denotes elementwise multiplication. The lower figure shows that we should project weights on the diagonal to the corresponding row to achieve this conversion.</h5>
                     <p>Combining all ideas shown above, the final implementation is illustrated in Figure 4.</p>
                     <div class="img-auto"><img src="assets/img/figure4.jpg"></div>
                     <h5 style="text-align: center;">Figure 4. The hardware implementation of shift and multiply idea</h5>
@@ -164,8 +163,7 @@
         </tr>
       </tbody>
     </table>
-                    <h5 style="text-align: center;">Table 1</h5>
-                    <p>Table 1 Relative improvement of our design. *lower latency means better performance, and thus we use the reciprocal of latency. **Energy efficiency is measured per image and the energy consumption for our design is estimated by the Altera power estimator, which could be an under-estimate.</p>
+                    <h5 style="text-align: center;">Table 1. Relative improvement of our design. *lower latency means better performance, and thus we use the reciprocal of latency. **Energy efficiency is measured per image and the energy consumption for our design is estimated by the Altera power estimator, which could be an under-estimate.</h5>
                     <p>Finally, we compare our design with the tensorflow implementation of the original network using 8 threads running on a 8-way hyperthreading CPU with 2.40GHz clock. CPU code only runs 25 times faster than our FPGA implementation, although it uses 8 times more core and each core is 48 times faster. Moreover, the same design using a high-end GPU can recognize 250,000 images per second, but also consumes 250 Watt energy. On a per image basis, our energy consumption is only a little, 1.7x, better than that of a GPU design. However, in practice, say on a standalone device, we may not really need to classify 250,000 per second. In this case, our design will have much higher energy efficiency than a GPU design as the GPU heavily relies on batch processing to amortize the cost.</p>
                 </div>
             </div>
@@ -217,8 +215,8 @@
                     <p>Second, as non-ECE students, we did experience a hard time finding proper FPGA boards. Even after securing a board, we still encounter a lot of unexpected issues as we are non-ECE students. Due to the hardware problem, we have to make more backup plans, which brings troubles, but also help to shape our thoughts.</p>
                     <p>Third, as mentioned above, neural networks only have dependency between layers. Therefore, the first attempt tries to fully parallelize the entire layer by turning all weights to logical gates. Certainly, it is currently impossible to find one FPGA with at least 1024x1024 logic cells to store weights. Thus, we switched to our final design.</p>
                     <p>Along the way, we learn a wealth of new concepts and consistently change our plan according to the resources. In addition to the people mentioned in a previous section, we also sincerely thank everyone who have offered help or information, Kim, Darrin, etc.</p>
-                    
-                    <h2 class="text-center">Acknowledgments</h2>
+
+                    <h3>Acknowledgments</h3>
                     <p>Thanks to 418 staffs for designing this wonderful project and bringing us to this interesting topic, especially Karima for proposing the initial idea. Also, thank Prof. Bill Nace for providing us with the hardware resources.</p>
                 </div>
             </div>

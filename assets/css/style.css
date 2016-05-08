@@ -55,7 +55,10 @@ p {
     line-height:30px;
     padding-bottom:20px;
 }
-
+.col-md-12 > h5 {
+    font-size: 15px;
+        line-height: 30px;
+}
 .space-free {
     height:100px;
 }
@@ -274,6 +277,14 @@ section.challenge {
     margin-top: 20px;
     border-radius: 10px;
     overflow: hidden;*/
+}
+.img-auto-change {
+    width: 605px;
+    margin: auto;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    border-radius: 10px;
+    overflow: hidden;
 }
 .img-alg-auto {
     width: 450px;
