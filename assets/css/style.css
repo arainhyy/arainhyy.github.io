@@ -299,6 +299,10 @@ section.challenge {
 .img-f5-auto {
      max-width: 60%;
 }
+.table {
+    width: 70%;
+    margin: auto;
+}
 }
 .img-auto img {
     /*max-width: 100%;*/
@@ -306,6 +310,7 @@ section.challenge {
     margin: auto;
         max-width: 100%;
 }
+
 /*=======================================
     SERVICE STYLES
 ==================================================*/
