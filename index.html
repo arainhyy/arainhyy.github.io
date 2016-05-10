@@ -148,10 +148,10 @@
                     <h5 style="text-align: center;">Figure 5. The cycles needed for computing drop by a factor of 1024 and the loading cost can be amortized using batch processing</h5>
                     <p>For comparison, we compare our paper with an existing paper that also implements FPGA to classify MNIST dataset. After compensating for the difference in the board, i.e. consider cycles rather than absolute time, our design achieve 4x throughput than [2].  Note that the throughput is normalized by the number of gates, i.e. they use over 210,000 logic cells, while we only use 33,000. Because we can always use batch processing to increase throughput if resources permit. Moreover, our design has a 60 times lower latency than [2], as they use a batch size of 100 to exchange latency for throughput. The real power measurement of [2] is 1 mJ per image, and the Altera power estimator shows our design consumes 0.56 mJ per image. Considering the possibility of under-estimating, the energy consumption could be very similar in the real world. A full comparison is shown in Figure 6.</p>
                     <div class="img-auto img-f5-auto"><img src="assets/img/3.pic.jpg"></div>
-                    <h5 style="text-align: center;">Figure 6. Comparion of performance between our design and baseline FPGA paper</h5>
+                    <h5 style="text-align: center;">Figure 6. Comparison of performance between our design and baseline FPGA paper</h5>
                     <p>In the second part, we will compare our results with the open source tensorflow design running on a single-threaded CPU, as shown in Figure 7.</p>
                     <div class="img-auto img-f5-auto"><img src="assets/img/2.pic.jpg"></div>
-                    <h5 style="text-align: center;">Figure 7. Comparion of performance between our design and tensorflow on CPU</h5>
+                    <h5 style="text-align: center;">Figure 7. Comparison of performance between our design and tensorflow on CPU</h5>
                     <p>The CPU has 2.40GHz clock, while our board only has a 50 MHz clock. However, our throughput is very similar to the CPU throughput. Moreover, assuming that the CPU is loaded when executing digit recognition tasks, it will consume 127.1 Watt. Our board consumes 0.16 Watt. Therefore, our energy efficiency is 800 times better than the CPU design.
                     </p>
                     <h2>Conclusions</h2>
@@ -168,7 +168,7 @@
         <div class="container">
             <div class="row introduction">
                 <div class="col-md-12">
-                    <h2 class="text-center">Reference</h2>
+                    <h2>References</h2>
                     <ul>
                         <li id="ref1">[1] Cox, C.E. and E. Blanz, GangLion - a fast field Programmable gate array implementation of a connectionist classifier. IEEE Journal of Solid-State Circuits, 1992. 28(3): p. 288-299.</li>
                         <li id="ref2">[2] Jinhwan Park, Wonyong Sung. Fpga Based Implementation of Deep Neural Networks Using On-chip Memory Only. arXiv preprint arXiv:1602.01616, 2016.</li>
@@ -186,7 +186,6 @@
                     <h3>Appendix I - Work Division</h3>
                     <p>Equal work was performed by both project members.</p>
                     <h3>Appendix II - Personal Challenges</h3>
-                    <p>This is a trivial and unexciting section, but it briefly describes the process we have gone through and challenges we have met.</p>
                     <p>First, our implementation is based on a short paper from Kim et al. and we do not have any code available. Also, the paper does not record detailed information. Thus, we have to a lot of other papers and try a bunch of settings to reproduce the results. </p>
                     <p>Second, as non-ECE students, we did experience a hard time finding proper FPGA boards. Even after securing a board, we still encounter a lot of unexpected issues as we are non-ECE students. Due to the hardware problem, we have to make more backup plans, which brings troubles, but also help to shape our thoughts.</p>
                     <p>Third, as mentioned above, neural networks only have dependency between layers. Therefore, the first attempt tries to fully parallelize the entire layer by turning all weights to logical gates. Certainly, it is currently impossible to find one FPGA with at least 1024x1024 logic cells to store weights. Thus, we switched to our final design.</p>
