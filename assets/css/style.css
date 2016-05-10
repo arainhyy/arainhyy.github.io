@@ -298,10 +298,7 @@ section.challenge {
     width: 527px;
     margin: 0 auto;
 }
-.img-f3-auto {
-    width: 693px;
-    margin: 0 auto;
-}
+
 .img-f4-auto {
     width: 527px;
     margin: 0 auto;
@@ -309,6 +306,12 @@ section.challenge {
 @media(min-width: 1000px){
 .img-f5-auto {
      max-width: 60%;
+}
+.img-f3-auto {
+     max-width: 80%;
+}
+.img-f4-auto {
+     max-width: 50%;
 }
 .table {
     width: 70%;
