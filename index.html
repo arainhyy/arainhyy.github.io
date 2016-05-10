@@ -117,10 +117,10 @@
                     <h2>Optimizations</h2>
                     <h3 style="text-align: center;">Reduce the number of interconnections</h3>
                     <p>In a fully-connected neural network, the number of weights grows O(n<sup>2</sup>) with a number of nodes. Our network has 1024 nodes per hidden layer, and this is equivalent to one million interconnections in hardware, which is certainly impractical. </p>
-                    <p>Therefore, we want to reduce the number of interconnections. Instead of using a direct connection between all nodes, we can use an indirect connection. To achieve both high parallelization and resource efficiency, we use an optimization, i.e. shift the input to find the weight, which is shown in Figure 1.</p>
+                    <p>Therefore, we want to reduce the number of interconnections. The intuition is that, instead of using a direct connection between node 1 and node 2 as shown in the left figure of Figure 1, we can use an indirect connection between node 1 and node 2 as in the right figure of Figure 1.</p>
                     <div class="img-auto"><img src="assets/img/figure2.jpg"></div>
                     <h5 style="text-align: center;">Figure 1. Interconnections can be reused if we shift the inputs to proper locations</h5>
-                    <p>One can simply express computation process between two layers with a matrix multiplication operation. Specifically, we first rearrange the contribution of each node due to commutative property as shown in Figure 2.</p>
+                    <p>Concretely, one can simply express computation process between two layers with a matrix multiplication operation. Specifically, we first rearrange the contribution of each node due to commutative property as shown in Figure 2.</p>
                     <div class="img-auto"><img src="assets/img/4.pic.jpg"></div>
                     <h5 style="text-align: center;">Figure 2. Interconnections can be reused if we shift the inputs to proper locations</h5>
                     <p>Note that in the result, the first green column is the initial input 1, 2 and 3, and the second green column is a shift of the first column. Also, the third column is a shift of the second column. Based on this updated computation order, we can obtain the final result of multiplication between a vector and an n<sup>2</sup> matrix by n iterations as shown in Figure 3.  </p>
