@@ -117,11 +117,12 @@
                     <h2>Optimizations</h2>
                     <h3 style="text-align: center;">Reduce the number of interconnections</h3>
                     <p>In a fully-connected neural network, the number of weights grows O(n<sup>2</sup>) with a number of nodes. Our network has 1024 nodes per hidden layer, and this is equivalent to one million interconnections in hardware, which is certainly impractical. </p>
-                    <p>Therefore, we want to reduce the number of interconnections. Instead of using a direct connection between all nodes, we can use an indirect connection. To achieve both high parallelization and resource efficiency, we use an optimization, i.e. shift the input to find the weight, which is shown in Figure 1.</p>
+                    <p>Therefore, we want to reduce the number of interconnections. The intuition is that, instead of using a direct connection between node 1 and node 2 as shown in the left figure of Figure 1, we can use an indirect connection between node 1 and node 2 as in the right figure of Figure 1.</p>
                     <div class="img-auto img-f5-auto"><img src="assets/img/12.pic.jpg"></div>
                     <h5 style="text-align: center;">Figure 1. Interconnections can be reused if we shift the inputs to proper locations</h5>
-                    <p>One can simply express computation process between two layers with a matrix multiplication operation. Specifically, we first rearrange the contribution of each node due to commutative property as shown in Figure 2.</p>
+                    <p>Concretely, one can simply express computation process between two layers with a matrix multiplication operation. Specifically, we first rearrange the contribution of each node due to commutative property as shown in Figure 2.</p>
                     <div class="img-auto img-f3-auto"><img src="assets/img/4.pic.jpg"></div>
+
                     <h5 style="text-align: center;">Figure 2. Interconnections can be reused if we shift the inputs to proper locations</h5>
                     <p>Note that in the result, the first green column is the initial input 1, 2 and 3, and the second green column is a shift of the first column. Also, the third column is a shift of the second column. Based on this updated computation order, we can obtain the final result of multiplication between a vector and an n<sup>2</sup> matrix by n iterations as shown in Figure 3.  </p>
                     <div class="img-auto"><img src="assets/img/10.pic.jpg"></div>
@@ -137,20 +138,20 @@
                     <h3 style="text-align: center;">Implementation</h3>
                     <p>Combining all ideas shown above, the final implementation is illustrated in Figure 4. It accepts binary inputs and gives binary outputs. It also contains XNOR module, enable signal, and bit counter. The activation, which is essentially a comparator, decides whether to activate the output based on the number of ‘1’s.</p>
                     <div class="img-auto img-f4-auto"><img src="assets/img/11.pic.jpg"></div>
-                    <h5 style="text-align: center;">Figure 4. The hardware implementation of shift and multiply idea</h5>
+                    <h5 style="text-align: center;">Figure 4. The hardware implementation of shift and multiplication idea</h5>
 
                     <h2>Evaluation</h2>
                     <p>For evaluation, we target on the digit classification task using the MNIST dataset and all the following experiments are based on the Altera DE2-115 board. The board has 114,480 logic cells, 50 MHz clock and 2 MB SRAM. </p>
                     <p>In this section, we compare our design with the state-of-the-art approach, and we find that our approach greatly outperforms the state-of-the-art. Note that all measurements are converted to be resource-neural as the related paper tests on a much better FPGA than ours.</p>
                     <p>As shown in Figure 5, we speed up the classification phase by 1024x using our parallel algorithm. Compared with the cycles needed for loading weights, it is almost negligible. Then, we further use batch processing schemes to amortize the cost of loading, which reduces the loading cost by three times as we are able to use three modules in our hardware. </p>
                     <div class="img-auto img-f5-auto"><img src="assets/img/f1.jpg"></div>
-                    <h5 style="text-align: center;">Figure 5.  The cycles needed for computing drop by a factor of 1024.</h5>
+                    <h5 style="text-align: center;">Figure 5. The cycles needed for computing drop by a factor of 1024 and the loading cost can be amortized using batch processing</h5>
                     <p>For comparison, we compare our paper with an existing paper that also implements FPGA to classify MNIST dataset. After compensating for the difference in the board, i.e. consider cycles rather than absolute time, our design achieve 4x throughput than [2].  Note that the throughput is normalized by the number of gates, i.e. they use over 210,000 logic cells, while we only use 33,000. Because we can always use batch processing to increase throughput if resources permit. Moreover, our design has a 60 times lower latency than [2], as they use a batch size of 100 to exchange latency for throughput. The real power measurement of [2] is 1 mJ per image, and the Altera power estimator shows our design consumes 0.56 mJ per image. Considering the possibility of under-estimating, the energy consumption could be very similar in the real world. A full comparison is shown in Figure 6.</p>
                     <div class="img-auto img-f5-auto"><img src="assets/img/3.pic.jpg"></div>
-                    <h5 style="text-align: center;">Figure 6</h5>
+                    <h5 style="text-align: center;">Figure 6. Comparion of performance between our design and baseline FPGA paper</h5>
                     <p>In the second part, we will compare our results with the open source tensorflow design running on a single-threaded CPU, as shown in Figure 7.</p>
                     <div class="img-auto img-f5-auto"><img src="assets/img/2.pic.jpg"></div>
-                    <h5 style="text-align: center;">Figure 6</h5>
+                    <h5 style="text-align: center;">Figure 7. Comparion of performance between our design and tensorflow on CPU</h5>
                     <p>The CPU has 2.40GHz clock, while our board only has a 50 MHz clock. However, our throughput is very similar to the CPU throughput. Moreover, assuming that the CPU is loaded when executing digit recognition tasks, it will consume 127.1 Watt. Our board consumes 0.16 Watt. Therefore, our energy efficiency is 800 times better than the CPU design.
                     </p>
                     <h2>Conclusions</h2>
